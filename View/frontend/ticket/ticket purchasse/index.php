@@ -8,6 +8,8 @@ $ticketc = new TicketC();
     
 $ticket = null;
 
+$x = 0;
+
 if (
     isset($_GET['FirstName']) &&
     isset($_GET['LastName']) &&
@@ -21,11 +23,30 @@ if (
         !empty($_GET['FirstName']) &&
         !empty($_GET['LastName']) &&
         !empty($_GET['NumTickets']) &&
-        !empty($_GET['CouponID']) &&
         !empty($_GET['Event']) &&
         !empty($_GET['PickupDate']) &&
         !empty($_GET['PickupTime'])
-    ) {
+    )   {
+		if ($_GET['CouponID'] == ''){
+			$_GET['CouponID'] = '0';
+			$x = 1;
+		}
+		else{
+			$a = $_GET['CouponID'];
+			$sql = "SELECT coupon.Number - COUNT(ticket.IDCoupon) as usage_count 
+			FROM coupon 
+			LEFT JOIN ticket ON coupon.IDCoupon = ticket.IDCoupon WHERE coupon.IDCoupon = $a
+			GROUP BY coupon.IDCoupon";
+			$db = config::getConnexion();
+			$liste = $db->query($sql);
+			foreach ($liste as $coupon) {
+			if ($coupon['usage_count'] == 0)
+				echo "<script> alert('this coupon is not available anymore') </script>";
+			else
+				$x = 1;
+			}
+        }
+		if ($x == 1){
         $ticket = new Ticket(
             $_GET['NumTickets'],
             $_GET['FirstName'],
@@ -36,10 +57,10 @@ if (
             new DateTime($_GET['PickupTime'])
         );
         $ticketc->addTicket($ticket);
-        echo('Success');
+        echo('Success');}
+		}
     } else
         $error = "Missing information";
-}
 
 
 ?>
@@ -54,6 +75,8 @@ if (
 
 	<title>Booking Form HTML Template</title>
     <script>
+
+
         function validateForm() {
             var numTickets = document.getElementById("NumTickets").value;
             var firstName = document.getElementById("FirstName").value;
@@ -63,10 +86,9 @@ if (
             var pickupDate = document.getElementById("PickupDate").value;
             var pickupTime = document.getElementById("PickupTime").value;
             var currentDate = new Date();
-            if (numTickets.trim() === "" || isNaN(numTickets) ||
+            if (numTickets.trim() === "" ||
                 firstName.trim() === "" || /\d/.test(firstName) ||
                 lastName.trim() === "" || /\d/.test(lastName) ||
-                couponID.trim() === "" || isNaN(couponID) ||
                 event === "" || pickupDate.trim() === "" || pickupTime.trim() === "") {
                 alert("Please fill in all the required fields correctly.");
                 return false;
@@ -78,6 +100,7 @@ if (
                 return true;
             }
         }
+
     </script>
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
@@ -109,8 +132,8 @@ if (
 								<h2>Book Your Ticket</h2>
 							</div>
 							<div class="form-group">
-								<input name = "NumTickets" id = "NumTickets" class="form-control" type="text" placeholder="Enter your Number of tickets">
-								<span class="form-label">Number of Tickets</span>
+								<input name = "NumTickets" id = "NumTickets" class="form-control" type="email" placeholder="Enter your Email">
+								<span class="form-label">Email</span>
 							</div>
 							<div class="form-group">
 								<input name = "FirstName" id = "FirstName" class="form-control" type="text" placeholder="Enter your First Name">

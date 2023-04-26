@@ -203,6 +203,7 @@ $list = $couponc->listCoupon();
                                     <th scope="col">Influencer</th>
                                     <th scope="col">Number</th>
                                     <th scope="col">Percentage</th>
+                                    <th scope="col">Coupons Left</th>
                                     <th scope="col"> Delete </th>
                                     <th scope="col"> Refresh </th>
                                 </tr>
@@ -216,6 +217,7 @@ $list = $couponc->listCoupon();
                                     <td><?= $coupon['NomInf']; ?></td>
                                     <td><?= $coupon['Number']; ?></td>
                                     <td><?= $coupon['Percentage']; ?></td>
+                                    <td><?= $coupon['usage_count']; ?></td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="deletecoupon.php?IDCoupon=<?php echo $coupon['IDCoupon']; ?>">Delete</a>
                                     </td>

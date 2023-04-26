@@ -2,6 +2,8 @@
 include 'C:/xampp/htdocs/web/Controller/TicketC.php';
 $ticketc = new TicketC();
 
+$couponc = new CouponC();
+
 $error = "";
 
 $ticket = null;
@@ -14,7 +16,7 @@ if (
     isset($_GET['FirstName']) &&
     isset($_GET['LastName']) &&
     isset($_GET['NumTickets']) &&
-    isset($_GET['Coupon']) &&
+    isset($_GET['IDCoupon']) &&
     isset($_GET['Event']) &&
     isset($_GET['PickupDate']) &&
     isset($_GET['PickupTime'])
@@ -22,24 +24,26 @@ if (
     if (
         !empty($_GET['FirstName']) &&
         !empty($_GET['LastName']) &&
-        !empty($_GET['NumTickets']) &&
-        !empty($_GET['Coupon']) &&
         !empty($_GET['Event']) &&
         !empty($_GET['PickupDate']) &&
         !empty($_GET['PickupTime'])
     ) {
+        if ($_GET['IDCoupon'] == ''){
+			$_GET['IDCoupon'] = '0';
+		}
         $tickett = new Ticket(
             $_GET['NumTickets'],
             $_GET['FirstName'],
             $_GET['LastName'],
-            $_GET['Coupon'],
+            $_GET['IDCoupon'],
             $_GET['Event'],
             new DateTime($_GET['PickupDate']),
             new DateTime($_GET['PickupTime'])
         );
+        if (($_GET['IDCoupon'] == '0')||($couponc->verifycoupon($_GET['IDCoupon']))){
         $ticketc->updateticket($tickett,$_GET['IDTicket']);
         echo '<script>alert("test")</script>';
-        header('Location:index.php');
+        header('Location:index.php');}
     } else
         $error = "Missing information";
 }
@@ -240,8 +244,8 @@ if (
                             <form  method="get">
                                 <div class="mb-3">
                                     <input type="hidden" name="IDTicket" value="<?php echo $_GET['IDTicket']; ?>">
-                                    <label for="exampleInputPassword1" class="form-label">Number Of Ticket</label>
-                                    <input type="text" class="form-control" id="NumTickets" name="NumTickets" value="<?php echo $ticket['NumTickets']; ?>">
+                                    <label for="exampleInputPassword1" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="NumTickets" name="NumTickets" value="<?php echo $ticket['email']; ?>">
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">FirstName</label>
@@ -253,7 +257,7 @@ if (
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleInputPassword1" class="form-label">Coupon</label>
-                                    <input type="text" class="form-control" id="Coupon" name="Coupon" value="<?php echo $ticket['Coupon']; ?>">
+                                    <input type="text" class="form-control" id="IDCoupon" name="IDCoupon" value="<?php echo $ticket['IDCoupon']; ?>">
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleInputPassword1" class="form-label">Event</label>

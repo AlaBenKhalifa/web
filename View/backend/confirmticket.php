@@ -9,6 +9,7 @@
     ]);
     echo $query->rowCount() . " records UPDATED successfully <br>";
     echo ini_set("25","465");
+    $a = $_GET["IDTicket"];
     $template = "./tickettemplate.php";
     $subject = "Thank you for choosing Cultrify!";
     $headers = array(
@@ -17,8 +18,10 @@
         "From" => "cultrifycultrify@gmail.com"
     );
     $message = file_get_contents($template);
-    $email = "mrcrewned@gmail.com";
+    $word_to_replace = "Hello World";
+    $replacement_word = $a;
+    $message = str_replace($word_to_replace, $replacement_word, $message);
+    $email = $_GET["email"];
     mail($email,$subject,$message,$headers);
-    //echo '<script>alert("test")</script>';
     header('Location:index.php');
 ?>

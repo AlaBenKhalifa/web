@@ -216,7 +216,7 @@ if (
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Add Coupon</h6>
-                            <form  method="get">
+                            <form  method="get" onsubmit="return validateForm()">
                                 <div class="mb-3">
                                     <label for="exampleInputPassword1" class="form-label">IDCoupon</label>
                                     <input type="text" class="form-control" id="IDCoupon" name="IDCoupon">
@@ -235,6 +235,32 @@ if (
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add Coupon</button>
                             </form>
+                            <script>
+                                function validateForm() {
+                                    var IDCoupon = document.getElementById("IDCoupon").value;
+                                    var NomInf = document.getElementById("NomInf").value;
+                                    var Number = document.getElementById("Number").value;
+                                    var Percentage = document.getElementById("Percentage").value;
+
+                                    // Perform form validation here
+                                    // Example: Check if any of the fields are empty
+                                    if (IDCoupon === "" || NomInf === "" || Number === "" || Percentage === "") {
+                                        alert("Please fill in all fields.");
+                                        return false;
+                                    }
+                                    // Add additional validation logic as needed
+
+                                    // If form is valid, return true to allow form submission
+                                    return true;
+                                }
+                            </script>
+This function uses JavaScript to get the values of the form inputs and perform basic validation, such as checking if any of the fields are empty. You can customize the validation logic based on your specific requirements, such as checking for valid input formats, validating numeric or date inputs, etc. If the form is valid, the function returns true, allowing the form to be submitted. If any validation fails, the function returns false, preventing the form from being submitted and displaying an alert with a validation error message.
+
+
+
+
+
+
                         </div>
                     </div>
         

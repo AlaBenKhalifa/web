@@ -3,7 +3,7 @@
 class Ticket
 {
     private ?int $IDTicket = null;
-    private ?int $NumTickets = null;
+    private ?string $NumTickets = null;
     private ?string $FirstName = null;
     private ?string $LastName = null;
     private ?int $Coupon = null;

@@ -1,7 +1,8 @@
 <?php
-
 include 'C:/xampp/htdocs/web/Controller/TicketC.php';
+
 $ticketc = new TicketC();
+$couponc = new CouponC();
 $list = $ticketc->listTicket();
 
 ?>
@@ -271,7 +272,7 @@ $list = $ticketc->listTicket();
                             <thead>
                                 <tr class="text-white">
                                     <th scope="col">IDTicket</th>
-                                    <th scope="col">Number of tickets</th>
+                                    <th scope="col">Email</th>
                                     <th scope="col">First Name</th>
                                     <th scope="col">Last Name</th>
                                     <th scope="col">Coupon</th>
@@ -279,6 +280,7 @@ $list = $ticketc->listTicket();
                                     <th scope="col">Pickup Date</th>
                                     <th scope="col">Pickup Time</th>
                                     <th scope="col">State</th>
+                                    <th scope="col">Name of Influencer</th>
                                     <th scope="col">Delete</th>
                                     <th scope="col">Confirmation</th>
                                     <th scope="col">Edit</th>
@@ -287,22 +289,27 @@ $list = $ticketc->listTicket();
                             <tbody>
                                 <?php
                                     foreach ($list as $ticket) {
+                                        $coupon = "";
+                                        $coupon = $couponc->showCoupon($ticket['IDCoupon']);
+                                        if ($ticket['IDCoupon'] == '0')
+                                            $ticket['IDCoupon'] = '';
                                 ?>
                                 <tr>
                                     <td><?= $ticket['IDTicket']; ?></td>
-                                    <td><?= $ticket['NumTickets']; ?></td>
+                                    <td><?= $ticket['email']; ?></td>
                                     <td><?= $ticket['FirstName']; ?></td>
                                     <td><?= $ticket['LastName']; ?></td>
-                                    <td><?= $ticket['Coupon']; ?></td>
+                                    <td><?= $ticket['IDCoupon']; ?></td>
                                     <td><?= $ticket['Event']; ?></td>
                                     <td><?= $ticket['PickupDate']; ?></td>
                                     <td><?= $ticket['PickupTime']; ?></td>
                                     <td><?= $ticket['Confirmation']; ?></td>
+                                    <td><?= $coupon['NomInf']; ?></td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="deleteticket.php?IDTicket=<?php echo $ticket['IDTicket']; ?>">Delete</a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-sm btn-primary" href="confirmticket.php?IDTicket=<?php echo $ticket['IDTicket']; ?>">Confirm</a>
+                                        <a class="btn btn-sm btn-primary" href="confirmticket.php?IDTicket=<?php echo $ticket['IDTicket']; ?>&email=<?php echo $ticket['email']; ?>">Confirm</a>
                                     </td>
                                     <td><a class="btn btn-sm btn-primary" href="ticketedit.php?IDTicket=<?php echo $ticket['IDTicket']; ?>">Edit</a></td>
                                 </tr>

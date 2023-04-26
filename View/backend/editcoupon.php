@@ -18,7 +18,6 @@ if (
     if (
         !empty($_GET['IDCoupon']) &&
         !empty($_GET['NomInf']) &&
-        !empty($_GET['Number']) &&
         !empty($_GET['Percentage'])
     ) {
         $couponn = new Coupon($_GET['IDCoupon'],$_GET['NomInf'],$_GET['Number'],$_GET['Percentage']);

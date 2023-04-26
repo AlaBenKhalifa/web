@@ -1,13 +1,13 @@
 <?php
 
-include 'C:/xampp/htdocs/web/config.php';
+include 'C:/xampp/htdocs/web/Controller/CouponC.php';
 include 'C:/xampp/htdocs/web/Model/Ticket.php';
 
 class TicketC 
 {
     public function listTicket()
     {
-        $sql = "SELECT * FROM ticket";
+        $sql = "SELECT * FROM ticket INNER JOIN coupon on ticket.IDCoupon=coupon.IDCoupon";
         $db = config::getConnexion();
         try {
             $liste = $db->query($sql);
@@ -35,13 +35,13 @@ class TicketC
     function addTicket($ticket)
     {
         $sql = "INSERT INTO ticket 
-        VALUES (:idt,:nmt,:fn,:ln,:cp,:ev,:pd,:pt,'Pending')";
+        VALUES (:idt,:eml,:fn,:ln,:cp,:ev,:pd,:pt,'Pending')";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
                 ':idt' => $ticket->getIDTicket(),
-                ':nmt' => $ticket->getNumTickets(),
+                ':eml' => $ticket->getNumTickets(),
                 'fn' => $ticket->getFirstName(),
                 'ln' => $ticket->getLastName(),
                 'cp' => $ticket->getCoupon(),
@@ -57,13 +57,12 @@ class TicketC
     {
         try {
             $db = config::getConnexion();
-            echo('<script>alert("test")</script>');
             $query = $db->prepare(
                 'UPDATE ticket SET
-                    NumTickets = :nt,
+                    email = :nt,
                     FirstName = :fn, 
                     LastName = :ln,
-                    Coupon = :cp,
+                    IDCoupon = :cp,
                     Event = :ev,
                     PickupDate = :pd,
                     PickupTime = :pt
